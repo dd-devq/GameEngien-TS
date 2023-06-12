@@ -11,7 +11,6 @@ interface RendererConfig {
 }
 
 interface GameConfig {
-    timeScale: number
     deltaTime: number
     fps: number
 }

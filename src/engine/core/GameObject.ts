@@ -7,7 +7,7 @@ class GameObject implements IRenderable {
     public name: string
     public position: Position
     public componentMap: Map<string, Component>
-    private isActive: boolean
+    protected isActive: boolean
 
     constructor(name: string, position?: Position) {
         if (position == null) {
@@ -18,16 +18,17 @@ class GameObject implements IRenderable {
 
         this.name = name
         this.componentMap = new Map<string, Component>()
+        this.isActive = true
     }
 
     public start(): void {
         //
     }
 
-    public update(timeScale: number, deltaTime: number): void {
-        if (timeScale != 0 && this.isActive) {
+    public update(deltaTime: number): void {
+        if (this.isActive) {
             for (const [uuid, component] of this.componentMap) {
-                component.update(timeScale, deltaTime)
+                component.update(deltaTime)
             }
         }
     }
@@ -68,6 +69,11 @@ class GameObject implements IRenderable {
     public reset(): void {
         this.position.x = 0
         this.position.y = 0
+    }
+
+    public setPosition(position: Position): void {
+        this.position.x = position.x
+        this.position.y = position.y
     }
 }
 

@@ -1,3 +1,0 @@
-class ObjectPooler {}
-
-export { ObjectPooler }

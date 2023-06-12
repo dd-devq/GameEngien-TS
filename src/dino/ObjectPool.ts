@@ -1,0 +1,3 @@
+class ObjectPool {}
+
+export { ObjectPool }

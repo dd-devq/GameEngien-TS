@@ -1,5 +1,5 @@
-import { Engine } from '../engine'
+import { GameObject } from '../engine/Engine'
 
-class Bird extends Engine.GameObject {}
+class Bird extends GameObject {}
 
 export { Bird }

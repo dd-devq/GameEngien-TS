@@ -2,7 +2,7 @@ import { Renderer } from './Renderer'
 import { Component } from '../core/Component'
 
 class Sprite extends Component {
-    private image: HTMLImageElement
+    public image: HTMLImageElement
 
     constructor(img_src: string) {
         super()
@@ -10,8 +10,9 @@ class Sprite extends Component {
         this.image.src = img_src
     }
 
-    public override update(timeScale: number, deltaTime: number): void {
-        if (timeScale != 0 && this.isActive) {
+    public override update(deltaTime: number): void {
+        if (this.isActive) {
+            //update
         }
     }
     public override render(renderer: Renderer): void {

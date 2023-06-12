@@ -11,23 +11,22 @@ class Game {
     public renderer: Renderer
     public resourceManager: ResourceManager
 
-    private timeScale: number
     private deltaTime: number
     private fps: number
 
     constructor() {
         this.sceneMap = new Map<string, Scene>()
+        const defaultScene = new Scene('Default')
+        this.addScene(defaultScene)
     }
 
     public init(gameConfig: GameConfig, renderConfig: RendererConfig): boolean {
         this.renderer = new Renderer(renderConfig)
         this.resourceManager = new ResourceManager()
 
-        this.timeScale = gameConfig.timeScale
         this.deltaTime = gameConfig.deltaTime
         this.fps = gameConfig.fps
 
-        requestAnimationFrame(this.gameLoop)
         return true
     }
 
@@ -54,8 +53,11 @@ class Game {
     }
 
     public setActiveScene(name: string): void {
-        if (this.sceneMap.has(name)) {
-            this.nowActiveScene = this.sceneMap.get(name)!
+        const scene = this.sceneMap.get(name)
+        if (scene !== undefined) {
+            this.nowActiveScene = scene
+        } else {
+            Logger.warn('Unknown Scene!')
         }
     }
 
@@ -68,12 +70,11 @@ class Game {
     }
 
     protected update(): void {
-        if (this.nowActiveScene == null) {
+        if (this.nowActiveScene === null) {
             Logger.warn('No Active Scene!')
             return
         }
-
-        this.nowActiveScene.update(this.timeScale, this.deltaTime)
+        this.nowActiveScene.update(this.deltaTime)
     }
 
     protected render(): void {

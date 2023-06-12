@@ -1,5 +1,4 @@
-import { Engine } from '../engine'
-
-class Cactus extends Engine.GameObject {}
+import { GameObject } from '../engine/Engine'
+class Cactus extends GameObject {}
 
 export { Cactus }

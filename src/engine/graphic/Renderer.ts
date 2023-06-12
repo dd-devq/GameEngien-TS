@@ -1,5 +1,6 @@
 import { RenderContext } from './RenderContext'
 import { Logger } from '../utils/Logger'
+import { Position, Sprite } from '../Engine'
 
 class Renderer {
     public renderContext: RenderContext
@@ -16,6 +17,11 @@ class Renderer {
     public clear() {
         this.renderContext.clearContext()
         this.renderContext.drawCanvasContextArea()
+    }
+
+    public drawSprite(sprite: Sprite, position: Position) {
+        const worldPosition = this.renderContext.toWorldPosition(position)
+        RenderContext.canvasContext.drawImage(sprite.image, worldPosition.x, worldPosition.y)
     }
 }
 

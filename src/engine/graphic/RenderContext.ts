@@ -1,3 +1,4 @@
+import { Position } from '../Engine'
 import { Logger } from '../utils/Logger'
 
 class RenderContext {
@@ -32,14 +33,15 @@ class RenderContext {
         game.appendChild(RenderContext.canvas)
 
         /* Canvas Context Initialization*/
-        if (RenderContext.canvas.getContext('2d') == null) {
+        const renderContext = RenderContext.canvas.getContext('2d')
+
+        if (renderContext !== null) {
+            RenderContext.canvasContext = renderContext
+        } else {
             Logger.error('Canvas Not Found')
             return false
         }
-
-        RenderContext.canvasContext = RenderContext.canvas.getContext('2d')!
-
-        Logger.info('Renderer Context Initialized!')
+        Logger.info('Render Context Initialized!')
         return true
     }
 
@@ -50,6 +52,18 @@ class RenderContext {
     public drawCanvasContextArea(): void {
         RenderContext.canvasContext.fillStyle = 'white'
         RenderContext.canvasContext.fillRect(0, 0, this.width, this.height)
+    }
+
+    public toWorldPosition(position: Position): Position {
+        return new Position(position.x + this.width / 2, -position.y + this.height / 2)
+    }
+
+    public isInCanvas(position: Position, offset: Position): boolean {
+        const worldPosition = this.toWorldPosition(position)
+        if (worldPosition.x + offset.x < 0 || worldPosition.y + offset.y > this.height) {
+            return false
+        }
+        return true
     }
 
     public getCanvasHeight(): number {

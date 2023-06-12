@@ -5,6 +5,7 @@ class Dino extends GameObject {
     public rigidBody: RigidBody
     public nowRenderingResource: IRenderResource
     public animator: SpriteAnimator
+    public dinoState: DinoState
 
     constructor() {
         super('Dino')
@@ -12,6 +13,20 @@ class Dino extends GameObject {
         this.rigidBody = new RigidBody()
         // this.nowRendering = ResourceManager.load("dinoIdle");
     }
+
+    public setState(dinoState: DinoState): void {}
 }
+
+abstract class DinoState {}
+
+class JumpingState extends DinoState {}
+
+class RunningState extends DinoState {}
+
+class DuckingState extends DinoState {}
+
+class DeadState extends DinoState {}
+
+class ReadyState extends DinoState {}
 
 export { Dino }

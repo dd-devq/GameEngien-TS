@@ -20,8 +20,8 @@ class Component implements IRenderResource {
         //
     }
 
-    public update(timeScale: number, deltaTime: number): void {
-        if (timeScale != 0 && this.isActive) {
+    public update(deltaTime: number): void {
+        if (this.isActive) {
             //
         }
     }

@@ -32,7 +32,7 @@ class Timer {
     }
 
     public static getDeltaTime(): number {
-        const deltaTime: number = this.startTime - this.endTime
+        const deltaTime: number = (this.startTime - this.endTime) / 1000
         return deltaTime
     }
 }

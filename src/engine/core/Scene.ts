@@ -19,9 +19,9 @@ class Scene {
         this.gameObejctMap.set(gameObject.name, gameObject)
     }
 
-    public update(timeScale: number, deltaTime: number): void {
+    public update(deltaTime: number): void {
         for (const [name, gameObject] of this.gameObejctMap) {
-            gameObject.update(timeScale, deltaTime)
+            gameObject.update(deltaTime)
         }
     }
 

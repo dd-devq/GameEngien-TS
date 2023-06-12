@@ -1,5 +1,4 @@
-import { Engine } from '../engine'
-
-class Cloud extends Engine.GameObject {}
+import { GameObject } from '../engine/Engine'
+class Cloud extends GameObject {}
 
 export { Cloud }

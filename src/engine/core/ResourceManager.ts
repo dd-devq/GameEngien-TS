@@ -16,7 +16,7 @@ class ResourceManager {
     }
 
     public loadResource(name: string): IRenderResource | undefined {
-        if (this.resourceCache.get(name) != undefined) {
+        if (this.resourceCache.get(name) !== undefined) {
             return this.resourceCache.get(name)
         }
         Logger.warn(`Unknown resource: ${name}!`)
