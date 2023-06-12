@@ -1,15 +1,35 @@
-class Position {
+class Vector2 {
     public x: number
     public y: number
 
-    constructor(x: number, y: number) {
+    constructor(x = 0, y = 0) {
         this.x = x
         this.y = y
     }
+    public scale(scalar: number): Vector2 {
+        return new Vector2(this.x * scalar, this.y * scalar)
+    }
+
+    public add(vector: Vector2): Vector2 {
+        return new Vector2(this.x + vector.x, this.y + vector.y)
+    }
+
+    public min(vector: Vector2): Vector2 {
+        return new Vector2(this.x - vector.x, this.y - vector.y)
+    }
+
+    public mul(vector: Vector2): Vector2 {
+        return new Vector2(this.x * vector.x, this.y * vector.y)
+    }
+
+    public div(vector: Vector2): Vector2 {
+        return new Vector2(this.x / vector.x, this.y / vector.y)
+    }
+
+    public reset(): void {
+        this.x = 0
+        this.y = 0
+    }
 }
 
-function addPosition(position1: Position, position2: Position): Position {
-    return new Position(position1.x + position2.x, position1.y + position2.y)
-}
-
-export { Position, addPosition }
+export { Vector2 }

@@ -1,22 +1,30 @@
 import { SpriteAnimation } from './SpriteAnimation'
 import { Component } from '../core/Component'
 import { Sprite } from './Sprite'
+import { Renderer } from './Renderer'
 class SpriteAnimator extends Component {
     public animationClips: Map<string, SpriteAnimation>
     public currentAnimation: string
 
-    constructor() {
-        super()
+    constructor(parent: IRenderable) {
+        super(parent)
         this.animationClips = new Map<string, SpriteAnimation>()
         this.currentAnimation = ''
     }
 
+    public override render(renderer: Renderer): void {
+        if (this.isActive && this.isDrawable) {
+            // render
+        }
+    }
+
     override update(deltaTime: number): void {
-        this.animationClips.get(this.currentAnimation)?.update(deltaTime)
+        if (this.isActive) {
+            this.animationClips.get(this.currentAnimation)?.update(deltaTime)
+        }
     }
 
     public play(animation: string): void {
-        console.log(animation)
         if (this.currentAnimation !== animation) {
             this.currentAnimation = animation
             this.animationClips.get(this.currentAnimation)?.update(0)

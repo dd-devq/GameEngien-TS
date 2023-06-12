@@ -1,34 +1,30 @@
-import { Position } from '../utils/Math'
 import { generateUUID } from '../utils/UUID'
-import { Renderer } from '../graphic/Renderer'
+import { Renderer, Logger } from '../Engine'
 
-class Component implements IRenderResource {
+abstract class Component implements IRenderResource {
     public uuid: string
-    public localPosition: Position
     protected isActive: boolean
+    protected isDrawable: boolean
+    protected parent: IRenderable
 
-    constructor(position?: Position) {
-        if (position == null) {
-            this.localPosition = new Position(0, 0)
-        } else {
-            this.localPosition = position
-        }
+    set Parent(gameObject: IRenderable) {
+        this.parent = gameObject
+    }
+
+    get Parent(): IRenderable {
+        return this.parent
+    }
+
+    constructor(gameObejct: IRenderable) {
         this.uuid = generateUUID(8)
+        this.parent = gameObejct
+        this.isActive = true
+        this.isDrawable = true
     }
 
-    public start(): void {
-        //
-    }
+    public abstract update(deltaTime: number): void
 
-    public update(deltaTime: number): void {
-        if (this.isActive) {
-            //
-        }
-    }
-
-    public render(renderer: Renderer): void {
-        //
-    }
+    public abstract render(renderer: Renderer): void
 
     public setActive(isActive: boolean): void {
         this.isActive = isActive
@@ -36,16 +32,11 @@ class Component implements IRenderResource {
     }
 
     public onEnabled(): void {
-        //
+        Logger.info(`Component: ${this.uuid} is enabled!`)
     }
 
     public onDisabled(): void {
-        //
-    }
-
-    public reset(): void {
-        this.localPosition.x = 0
-        this.localPosition.y = 0
+        Logger.info(`Component: ${this.uuid} is disabled!`)
     }
 }
 

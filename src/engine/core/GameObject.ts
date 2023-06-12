@@ -1,18 +1,18 @@
-import { Position } from '../utils/Math'
 import { Component } from './Component'
 import { Logger } from '../utils/Logger'
 import { Renderer } from '../graphic/Renderer'
+import { Vector2 } from '../Engine'
 
 class GameObject implements IRenderable {
     public name: string
-    public position: Position
+    public position: Vector2
     public componentMap: Map<string, Component>
     protected isActive: boolean
     public isUpdated: boolean
 
-    constructor(name: string, position?: Position) {
+    constructor(name: string, position?: Vector2) {
         if (position == null) {
-            this.position = new Position(0, 0)
+            this.position = new Vector2(0, 0)
         } else {
             this.position = position
         }
@@ -61,11 +61,11 @@ class GameObject implements IRenderable {
     }
 
     public onEnabled(): void {
-        //
+        Logger.info(`Game Object: ${this.name} is enabled!`)
     }
 
     public onDisabled(): void {
-        //
+        Logger.info(`Game Object: ${this.name} is disabled!`)
     }
 
     public reset(): void {
@@ -73,7 +73,7 @@ class GameObject implements IRenderable {
         this.position.y = 0
     }
 
-    public setPosition(position: Position): void {
+    public setPosition(position: Vector2): void {
         this.position.x = position.x
         this.position.y = position.y
     }

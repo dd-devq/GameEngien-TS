@@ -26,7 +26,7 @@ class SpriteAnimation {
     }
 
     update(deltaTime: number): void {
-        this.currentFrameTime += deltaTime
+        this.currentFrameTime += -deltaTime + 0.00075
         if (this.currentFrameTime > 1 / this.frameRate) {
             this.currentFrameIndex = (this.currentFrameIndex + 1) % this.clip.length
             this.currentFrameTime = 0

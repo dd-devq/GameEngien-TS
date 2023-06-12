@@ -1,6 +1,5 @@
-import { GameObject, Logger, Position } from '../engine/Engine'
-import { InputManager } from '../engine/core/InputManager'
-import { Renderer } from '../engine/graphic/Renderer'
+import { Renderer, InputManager, Vector2, GameObject, Logger } from '../engine/Engine'
+
 import { Dino } from './Dino'
 import { Ground } from './Ground'
 import { ObjectPool } from './ObjectPool'
@@ -25,7 +24,6 @@ class GameManager extends GameObject {
     }
 
     public override update(deltaTime: number): void {
-        console.log(this.inputManager.isKeyPressed(' '))
         switch (this.gameState) {
             case gameState.READY: {
                 this.updateReady(deltaTime)
@@ -55,7 +53,7 @@ class GameManager extends GameObject {
 
         if (!this.ground1.isIncanvas) {
             this.ground1.setPosition(
-                new Position(
+                new Vector2(
                     this.ground2.position.x + this.ground1.imageOffset.x,
                     this.ground1.position.y
                 )
@@ -63,7 +61,7 @@ class GameManager extends GameObject {
         }
         if (!this.ground2.isIncanvas) {
             this.ground2.setPosition(
-                new Position(
+                new Vector2(
                     this.ground1.position.x + this.ground2.imageOffset.x,
                     this.ground2.position.y
                 )
@@ -88,7 +86,9 @@ class GameManager extends GameObject {
             this.gameState = gameState.READY
         }
     }
-    public override render(renderer: Renderer): void {}
+    public override render(renderer: Renderer): void {
+        //
+    }
 }
 
 export { GameManager }

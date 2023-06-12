@@ -1,18 +1,16 @@
-import { Position } from '../engine/Engine'
-import { GameObject } from '../engine/Engine'
-import { Renderer } from '../engine/graphic/Renderer'
-import { Sprite } from '../engine/Engine'
+import { Sprite, GameObject, Renderer, Vector2 } from '../engine/Engine'
+
 class Ground extends GameObject {
     private nowRenderingResource: IRenderResource
     public accelaration: number
     public speed: number
-    public imageOffset: Position
+    public imageOffset: Vector2
     public isIncanvas: boolean
     readonly MAX_SPEED: number
     readonly DEFAULT_SPEED: number = 1.5
-    readonly DEFAULT_POSTION: Position = new Position(0, 0)
+    readonly DEFAULT_POSTION: Vector2 = new Vector2(0, 0)
 
-    constructor(name: string, position?: Position) {
+    constructor(name: string, position?: Vector2) {
         super(name, position)
         this.accelaration = 3
         this.speed = this.DEFAULT_SPEED
@@ -26,7 +24,7 @@ class Ground extends GameObject {
 
     public loadResource(sprite: IRenderResource) {
         this.nowRenderingResource = sprite
-        this.imageOffset = new Position(
+        this.imageOffset = new Vector2(
             (this.nowRenderingResource as Sprite).image.width,
             (this.nowRenderingResource as Sprite).image.height
         )

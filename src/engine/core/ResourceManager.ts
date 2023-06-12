@@ -1,8 +1,11 @@
 import { Logger } from '../utils/Logger'
-class ResourceManager {
+import { GameObject } from './GameObject'
+
+class ResourceManager extends GameObject {
     private resourceCache: Map<string, IRenderResource>
 
     constructor() {
+        super('Resource Manager')
         this.resourceCache = new Map<string, IRenderResource>()
         Logger.info('Resource Manager Initialized!')
     }
