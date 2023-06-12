@@ -1,8 +1,9 @@
-import { Game, Position } from '../engine/Engine'
+import { Game, Position, SpriteAnimation, SpriteAnimator } from '../engine/Engine'
 import { Logger } from '../engine/Engine'
 import { Sprite } from '../engine/Engine'
 import { GameManager } from './GameManager'
 import { Ground } from './Ground'
+import { Dino } from './Dino'
 
 class DinoGame extends Game {
     private gameManager: GameManager
@@ -14,16 +15,17 @@ class DinoGame extends Game {
     public override init(gameConfig: GameConfig, renderConfig: RendererConfig): boolean {
         const init: boolean = super.init(gameConfig, renderConfig)
         this.gameManager = new GameManager('DinoGameManager')
-        this.setupGame()
+        this.nowActiveScene.addGameObject(this.gameManager)
+
         this.loadResource()
         this.setupGameObject()
+        this.setupGame()
         requestAnimationFrame(this.gameLoop)
         return init
     }
 
     protected override update(): void {
         super.update()
-        Logger.info('Game Updated')
     }
 
     public loadResource(): void {
@@ -140,12 +142,14 @@ class DinoGame extends Game {
         const replay = new Sprite('assets/UI/replay.png')
         this.resourceManager.registerResource('replay', replay)
     }
+    public setupGame(): void {
+        this.gameManager.inputManager = this.inputManager
+    }
 
     public setupGameObject(): void {
         this.setupGround()
+        this.setupDino()
     }
-
-    public setupGame(): void {}
 
     public setupGround(): void {
         const ground1 = new Ground('ground1', new Position(-600, -75))
@@ -157,6 +161,8 @@ class DinoGame extends Game {
         }
         this.nowActiveScene.addGameObject(ground1)
         this.nowActiveScene.addGameObject(ground2)
+        this.gameManager.ground1 = ground1
+        this.gameManager.ground2 = ground2
     }
 
     public setupBird(): void {}
@@ -165,7 +171,47 @@ class DinoGame extends Game {
 
     public setupUI(): void {}
 
-    public setupDino(): void {}
+    public setupDino(): void {
+        const dino = new Dino('Dino', new Position(-500, -40))
+        const dinoAnimator = new SpriteAnimator()
+
+        const idleAnimation = new SpriteAnimation('Idle', 24)
+        const deadAnimation = new SpriteAnimation('Dead', 24)
+        const jumpAnimation = new SpriteAnimation('Jump', 24)
+        const runAnimation = new SpriteAnimation('Run', 24)
+        const crouchAnimation = new SpriteAnimation('Crouch', 24)
+
+        const idleClip = [this.resourceManager.loadResource('dinoIdle')]
+        const deadClip = [this.resourceManager.loadResource('dinoDead')]
+        const jumpClip = [this.resourceManager.loadResource('dinoJump')]
+        const runClip = [
+            this.resourceManager.loadResource('dinoRunFrame1'),
+            this.resourceManager.loadResource('dinoRunFrame2'),
+        ]
+        const crouchClip = [
+            this.resourceManager.loadResource('dinoCrouchFrame1'),
+            this.resourceManager.loadResource('dinoCrouchFrame2'),
+        ]
+
+        idleAnimation.setClip(idleClip as Sprite[])
+        deadAnimation.setClip(deadClip as Sprite[])
+        jumpAnimation.setClip(jumpClip as Sprite[])
+        runAnimation.setClip(runClip as Sprite[])
+        crouchAnimation.setClip(crouchClip as Sprite[])
+
+        dinoAnimator.registerAnimation('Idle', idleAnimation)
+        dinoAnimator.registerAnimation('Dead', deadAnimation)
+        dinoAnimator.registerAnimation('Jump', jumpAnimation)
+        dinoAnimator.registerAnimation('Run', runAnimation)
+        dinoAnimator.registerAnimation('Crouch', crouchAnimation)
+        dinoAnimator.play('Idle')
+        console.log(dinoAnimator)
+        dino.dinoAnimator = dinoAnimator
+        dino.addComponent(dinoAnimator)
+
+        this.nowActiveScene.addGameObject(dino)
+        this.gameManager.dino = dino
+    }
 
     public setupGameManager(): void {}
 }

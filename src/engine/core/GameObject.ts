@@ -8,6 +8,7 @@ class GameObject implements IRenderable {
     public position: Position
     public componentMap: Map<string, Component>
     protected isActive: boolean
+    public isUpdated: boolean
 
     constructor(name: string, position?: Position) {
         if (position == null) {
@@ -19,6 +20,7 @@ class GameObject implements IRenderable {
         this.name = name
         this.componentMap = new Map<string, Component>()
         this.isActive = true
+        this.isUpdated = false
     }
 
     public start(): void {

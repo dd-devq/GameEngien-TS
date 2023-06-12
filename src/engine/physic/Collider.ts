@@ -20,17 +20,17 @@ class BoxCollider extends Component {
         }
     }
 
-    checkCollision(otherCollider: BoxCollider): boolean {
-        if (
-            this.position.x < otherCollider.position.x + otherCollider.width &&
-            this.position.x + this.width > otherCollider.position.x &&
-            this.position.y < otherCollider.position.y + otherCollider.height &&
-            this.position.y + this.height > otherCollider.position.y
-        ) {
-            return true
-        }
-        return false
-    }
+    // checkCollision(otherCollider: BoxCollider): boolean {
+    //     if (
+    //         this.position.x < otherCollider.position.x + otherCollider.width &&
+    //         this.position.x + this.width > otherCollider.position.x &&
+    //         this.position.y < otherCollider.position.y + otherCollider.height &&
+    //         this.position.y + this.height > otherCollider.position.y
+    //     ) {
+    //         return true
+    //     }
+    //     return false
+    // }
 }
 
 class CapsuleCollider extends Component {}

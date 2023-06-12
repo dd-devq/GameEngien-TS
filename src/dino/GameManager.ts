@@ -1,6 +1,8 @@
-import { GameObject, Logger } from '../engine/Engine'
+import { GameObject, Logger, Position } from '../engine/Engine'
+import { InputManager } from '../engine/core/InputManager'
 import { Renderer } from '../engine/graphic/Renderer'
 import { Dino } from './Dino'
+import { Ground } from './Ground'
 import { ObjectPool } from './ObjectPool'
 
 enum gameState {
@@ -13,22 +15,28 @@ class GameManager extends GameObject {
     public gameState: gameState
     public objectPool: ObjectPool
     public dino: Dino
+    public ground1: Ground
+    public ground2: Ground
+    public inputManager: InputManager
 
-    constructor(dino: Dino) {
-        super('Dino Game Manager')
-        this.dino = dino
+    constructor(name: string) {
+        super(name)
         this.gameState = gameState.READY
     }
 
     public override update(deltaTime: number): void {
+        console.log(this.inputManager.isKeyPressed(' '))
         switch (this.gameState) {
             case gameState.READY: {
+                this.updateReady(deltaTime)
                 break
             }
             case gameState.GAMEPLAY: {
+                this.updateGameplay(deltaTime)
                 break
             }
             case gameState.GAMEOVER: {
+                this.updateGameover(deltaTime)
                 break
             }
             default: {
@@ -38,6 +46,48 @@ class GameManager extends GameObject {
         }
     }
 
+    public updateGameplay(deltaTime: number): void {
+        if (InputManager.getInstance().isKeyPressed('d')) {
+            this.gameState = gameState.GAMEOVER
+            this.ground1.isUpdated = false
+            this.ground2.isUpdated = false
+        }
+
+        if (!this.ground1.isIncanvas) {
+            this.ground1.setPosition(
+                new Position(
+                    this.ground2.position.x + this.ground1.imageOffset.x,
+                    this.ground1.position.y
+                )
+            )
+        }
+        if (!this.ground2.isIncanvas) {
+            this.ground2.setPosition(
+                new Position(
+                    this.ground1.position.x + this.ground2.imageOffset.x,
+                    this.ground2.position.y
+                )
+            )
+        }
+    }
+
+    public updateReady(deltaTime: number): void {
+        if (InputManager.getInstance().isKeyPressed(' ')) {
+            this.gameState = gameState.GAMEPLAY
+            Logger.info('Start Gameplay')
+            this.ground1.isUpdated = true
+            this.ground2.isUpdated = true
+            this.dino.isUpdated = true
+        }
+    }
+
+    public updateGameover(deltaTime: number): void {
+        if (InputManager.getInstance().isKeyPressed(' ')) {
+            this.ground1.reset()
+            this.ground2.reset()
+            this.gameState = gameState.READY
+        }
+    }
     public override render(renderer: Renderer): void {}
 }
 

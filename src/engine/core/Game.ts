@@ -10,6 +10,7 @@ class Game {
     public nowActiveScene: Scene
     public renderer: Renderer
     public resourceManager: ResourceManager
+    public inputManager: InputManager
 
     private deltaTime: number
     private fps: number
@@ -23,6 +24,7 @@ class Game {
     public init(gameConfig: GameConfig, renderConfig: RendererConfig): boolean {
         this.renderer = new Renderer(renderConfig)
         this.resourceManager = new ResourceManager()
+        this.inputManager = new InputManager()
 
         this.deltaTime = gameConfig.deltaTime
         this.fps = gameConfig.fps
@@ -33,14 +35,13 @@ class Game {
     public gameLoop = (): void => {
         Timer.start()
 
-        this.processInput()
         this.update()
         this.render()
 
         Timer.end()
         this.deltaTime = Timer.getDeltaTime()
-        InputManager.reset()
-        requestAnimationFrame(this.gameLoop.bind(this))
+        this.inputManager.reset()
+        requestAnimationFrame(this.gameLoop)
     }
 
     public addScene(scene: Scene): void {
@@ -63,10 +64,6 @@ class Game {
 
     public getActiveScene(): Scene {
         return this.nowActiveScene
-    }
-
-    protected processInput(): void {
-        InputManager.handleInput()
     }
 
     protected update(): void {

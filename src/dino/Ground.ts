@@ -6,15 +6,18 @@ class Ground extends GameObject {
     private nowRenderingResource: IRenderResource
     public accelaration: number
     public speed: number
-    private imageOffset: Position
+    public imageOffset: Position
+    public isIncanvas: boolean
     readonly MAX_SPEED: number
+    readonly DEFAULT_SPEED: number = 1.5
     readonly DEFAULT_POSTION: Position = new Position(0, 0)
 
     constructor(name: string, position?: Position) {
         super(name, position)
-        this.accelaration = 2.5
-        this.speed = 5
+        this.accelaration = 3
+        this.speed = this.DEFAULT_SPEED
         this.MAX_SPEED = 100
+        this.isIncanvas = true
         if (position != undefined) {
             this.DEFAULT_POSTION.x = position.x
             this.DEFAULT_POSTION.y = position.y
@@ -29,19 +32,31 @@ class Ground extends GameObject {
         )
     }
     public override render(renderer: Renderer): void {
-        if (this.isActive && renderer.renderContext.isInCanvas(this.position, this.imageOffset)) {
+        this.isIncanvas = renderer.renderContext.isInCanvas(this.position, this.imageOffset)
+        if (this.isActive && this.isIncanvas) {
             renderer.drawSprite(this.nowRenderingResource as Sprite, this.position)
         }
     }
 
     public override update(deltaTime: number): void {
-        this.increaseSpeed(deltaTime)
-        console.log(this.speed)
-        this.position.x -= this.speed
+        if (this.isUpdated) {
+            this.increaseSpeed(deltaTime)
+            this.position.x -= this.speed
+        }
     }
 
     public increaseSpeed(deltaTime: number): void {
-        this.speed -= deltaTime * this.accelaration
+        if (this.speed <= this.MAX_SPEED) {
+            this.speed -= deltaTime * this.accelaration
+        } else {
+            this.speed = this.MAX_SPEED
+        }
+    }
+    public override reset(): void {
+        this.isUpdated = false
+        this.position.x = this.DEFAULT_POSTION.x
+        this.position.y = this.DEFAULT_POSTION.y
+        this.speed = this.DEFAULT_SPEED
     }
 }
 
