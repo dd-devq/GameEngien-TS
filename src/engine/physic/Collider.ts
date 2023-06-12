@@ -15,7 +15,7 @@ class BoxCollider extends Component {
 
     public override render(renderer: Renderer): void {
         if (this.showCollider && this.isDrawable) {
-            // renderer draw
+            renderer.drawRect(this.parent.position, this.width, this.height)
         }
     }
     public override update(deltaTime: number): void {
@@ -23,6 +23,7 @@ class BoxCollider extends Component {
             //update
         }
     }
+
     checkCollision(collider: BoxCollider): boolean {
         if (
             this.parent.position.x < collider.parent.position.x + collider.width &&

@@ -6,7 +6,7 @@ class Ground extends GameObject {
     public speed: number
     public imageOffset: Vector2
     public isIncanvas: boolean
-    readonly MAX_SPEED: number
+    readonly MAX_SPEED: number = 100
     readonly DEFAULT_SPEED: number = 1.5
     readonly DEFAULT_POSTION: Vector2 = new Vector2(0, 0)
 
@@ -14,9 +14,8 @@ class Ground extends GameObject {
         super(name, position)
         this.accelaration = 3
         this.speed = this.DEFAULT_SPEED
-        this.MAX_SPEED = 100
         this.isIncanvas = true
-        if (position != undefined) {
+        if (position !== undefined) {
             this.DEFAULT_POSTION.x = position.x
             this.DEFAULT_POSTION.y = position.y
         }

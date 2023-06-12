@@ -216,9 +216,9 @@ class DinoGame extends Game {
         dinoAnimator.registerAnimation('Run', runAnimation)
         dinoAnimator.registerAnimation('Crouch', crouchAnimation)
         dinoAnimator.play('Idle')
+
         dino.dinoAnimator = dinoAnimator
         dino.addComponent(dinoAnimator)
-        dino.init()
 
         this.nowActiveScene.addGameObject(dino)
         this.gameManager.dino = dino

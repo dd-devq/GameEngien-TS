@@ -86,14 +86,16 @@ class DinoFSMSystem extends FSMSystem {
 }
 
 class JumpingState extends FSMState {
-    public override onEnter(): void {}
+    public override onEnter(): void {
+        //
+    }
     public override onExit(): void {
         //
     }
     public override onUpdate(deltaTime: number): void {
         if (
             (this.parent as DinoFSMSystem).Parent.position.y <=
-            (this.parent as DinoFSMSystem).Parent.DEFAULT_POSITION.y
+            ((this.parent as DinoFSMSystem).Parent as Dino).DEFAULT_POSITION.y
         ) {
             this.parent.gotoState((this.parent as DinoFSMSystem).runningState)
         }

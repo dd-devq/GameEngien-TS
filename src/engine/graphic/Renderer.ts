@@ -23,6 +23,9 @@ class Renderer {
         const worldPosition = this.renderContext.toWorldPosition(position)
         RenderContext.canvasContext.drawImage(sprite.image, worldPosition.x, worldPosition.y)
     }
+    public drawRect(position: Vector2, width: number, height: number) {
+        const worldPosition = this.renderContext.toWorldPosition(position)
+    }
 }
 
 export { Renderer }
