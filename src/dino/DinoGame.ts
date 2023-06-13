@@ -3,6 +3,7 @@ import { Vector2, Sprite, Game, SpriteAnimation, SpriteAnimator, Scene } from '.
 import { GameManager } from './GameManager'
 import { Ground } from './Ground'
 import { Dino } from './Dino'
+import { Cloud } from './Cloud'
 
 class DinoGame extends Game {
     constructor(renderConfig: RendererConfig) {
@@ -147,11 +148,11 @@ class DinoGame extends Game {
     }
 
     private setupGameObject(gameManager: GameManager): void {
-        this.setupGround(gameManager)
+        this.setupEnvironment(gameManager)
         this.setupDino(gameManager)
     }
 
-    public setupGround(gameManager: GameManager): void {
+    public setupEnvironment(gameManager: GameManager): void {
         const groundSprite = this.resourceManager.loadResource('ground')
 
         const ground1 = new Ground('ground1', new Vector2(-600, -75))
@@ -161,10 +162,32 @@ class DinoGame extends Game {
             ground1.loadResource(groundSprite)
             ground2.loadResource(groundSprite)
         }
+
         this.nowActiveScene.addGameObject(ground1)
         this.nowActiveScene.addGameObject(ground2)
         gameManager.ground1 = ground1
         gameManager.ground2 = ground2
+
+        const cloudSprite = this.resourceManager.loadResource('cloud')
+        const cloud1 = new Cloud('cloud1', new Vector2(700, -25))
+        const cloud2 = new Cloud('cloud2', new Vector2(1000, -0))
+        const cloud3 = new Cloud('cloud3', new Vector2(1200, 25))
+        const cloud4 = new Cloud('cloud4', new Vector2(1500, 75))
+        if (cloudSprite !== undefined) {
+            cloud1.loadResource(cloudSprite)
+            cloud2.loadResource(cloudSprite)
+            cloud3.loadResource(cloudSprite)
+            cloud4.loadResource(cloudSprite)
+        }
+
+        this.nowActiveScene.addGameObject(cloud1)
+        this.nowActiveScene.addGameObject(cloud2)
+        this.nowActiveScene.addGameObject(cloud3)
+        this.nowActiveScene.addGameObject(cloud4)
+        gameManager.clouds.push(cloud1)
+        gameManager.clouds.push(cloud2)
+        gameManager.clouds.push(cloud3)
+        gameManager.clouds.push(cloud4)
     }
 
     private setupBird(): void {

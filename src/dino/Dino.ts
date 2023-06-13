@@ -28,8 +28,10 @@ class Dino extends GameObject {
         }
     }
     public init(): void {
-        this.boxCollider = new BoxCollider(this, 200, 200)
+        this.boxCollider = new BoxCollider(this, 45, 50)
+        this.boxCollider.showCollider = true
         this.addComponent(this.boxCollider)
+
         this.nowRenderingResource = new Sprite(this, 'assets\\Dino\\dinoIdle.png')
         this.addComponent(this.rigidBody)
         this.dinoFSMSystem = new DinoFSMSystem(this)
@@ -47,6 +49,7 @@ class Dino extends GameObject {
         if (this.isActive) {
             renderer.drawSprite(this.nowRenderingResource as Sprite, this.position)
         }
+        super.render(renderer)
     }
 
     public override reset(): void {
@@ -87,7 +90,7 @@ class DinoFSMSystem extends FSMSystem {
 class JumpingState extends FSMState {
     public jumpInProgress: boolean
     public falling: boolean
-    public jumpForce = 225
+    public jumpForce = 200
 
     public override onEnter(): void {
         this.falling = false

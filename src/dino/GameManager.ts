@@ -1,4 +1,7 @@
 import { Renderer, InputManager, Vector2, GameObject, Logger } from '../engine/Engine'
+import { Bird } from './Bird'
+import { Cactus } from './Cactus'
+import { Cloud } from './Cloud'
 
 import { Dino } from './Dino'
 import { Ground } from './Ground'
@@ -12,7 +15,9 @@ enum gameState {
 
 class GameManager extends GameObject {
     public gameState: gameState
-    public objectPool: ObjectPool
+    public cactusPool: ObjectPool<Cactus>
+    public birdPool: ObjectPool<Bird>
+    public clouds: Cloud[] = []
     public dino: Dino
     public ground1: Ground
     public ground2: Ground
@@ -75,6 +80,9 @@ class GameManager extends GameObject {
             Logger.info('Start Gameplay')
             this.ground1.isUpdated = true
             this.ground2.isUpdated = true
+            for (const cloud of this.clouds) {
+                cloud.isUpdated = true
+            }
             this.dino.isUpdated = true
         }
     }

@@ -50,7 +50,7 @@ class RenderContext {
     }
 
     public drawCanvasContextArea(): void {
-        RenderContext.canvasContext.fillStyle = 'white'
+        RenderContext.canvasContext.fillStyle = 'black'
         RenderContext.canvasContext.fillRect(0, 0, this.width, this.height)
     }
 

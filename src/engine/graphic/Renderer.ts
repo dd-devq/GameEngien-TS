@@ -25,6 +25,11 @@ class Renderer {
     }
     public drawRect(position: Vector2, width: number, height: number) {
         const worldPosition = this.renderContext.toWorldPosition(position)
+        RenderContext.canvasContext.beginPath()
+        RenderContext.canvasContext.lineWidth = 0.5
+        RenderContext.canvasContext.strokeStyle = 'green'
+        RenderContext.canvasContext.rect(worldPosition.x, worldPosition.y, width, height)
+        RenderContext.canvasContext.stroke()
     }
 }
 

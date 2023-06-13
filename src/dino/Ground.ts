@@ -4,6 +4,7 @@ class Ground extends GameObject {
     private nowRenderingResource: IRenderResource
     public accelaration: number
     public speed: number
+
     public imageOffset: Vector2
     public isIncanvas: boolean
     readonly MAX_SPEED: number = 15
@@ -33,6 +34,7 @@ class Ground extends GameObject {
         if (this.isActive && this.isIncanvas) {
             renderer.drawSprite(this.nowRenderingResource as Sprite, this.position)
         }
+        super.render(renderer)
     }
 
     public override update(deltaTime: number): void {
@@ -51,8 +53,7 @@ class Ground extends GameObject {
     }
     public override reset(): void {
         this.isUpdated = false
-        this.position.x = this.DEFAULT_POSTION.x
-        this.position.y = this.DEFAULT_POSTION.y
+        this.position.equal(this.DEFAULT_POSTION)
         this.speed = this.DEFAULT_SPEED
     }
 }

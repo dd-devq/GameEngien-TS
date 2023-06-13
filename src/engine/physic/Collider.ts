@@ -10,10 +10,11 @@ class BoxCollider extends Component {
         super(parent)
         this.width = width
         this.height = height
-        this.showCollider = false
+        this.showCollider = true
     }
 
     public override render(renderer: Renderer): void {
+        console.log(this.showCollider && this.isDrawable)
         if (this.showCollider && this.isDrawable) {
             renderer.drawRect(this.parent.position, this.width, this.height)
         }
