@@ -23,10 +23,6 @@ class GameObject implements IRenderable {
         this.isUpdated = false
     }
 
-    public start(): void {
-        //
-    }
-
     public update(deltaTime: number): void {
         if (this.isActive) {
             for (const [uuid, component] of this.componentMap) {

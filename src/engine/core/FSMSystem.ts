@@ -1,3 +1,4 @@
+import { Logger } from '../Engine'
 import { Renderer } from '../graphic/Renderer'
 import { Component } from './Component'
 import { FSMState } from './FSMState'
@@ -34,7 +35,7 @@ class FSMSystem extends Component {
     }
     public override render(renderer: Renderer): void {
         if (this.isDrawable) {
-            // Draws
+            Logger.warn('FSMSystem is not drawable!')
         }
     }
 }

@@ -5,32 +5,23 @@ import { Ground } from './Ground'
 import { Dino } from './Dino'
 
 class DinoGame extends Game {
-    private gameManager: GameManager
     constructor() {
         super()
         Logger.info('Game Initialized!')
     }
 
-    public override init(gameConfig: GameConfig, renderConfig: RendererConfig): boolean {
-        const init: boolean = super.init(gameConfig, renderConfig)
-        this.gameManager = new GameManager('DinoGameManager')
-        this.nowActiveScene.addGameObject(this.gameManager)
-
+    public override init(renderConfig: RendererConfig): boolean {
+        const init = super.init(renderConfig)
+        const gameManager: GameManager = new GameManager('Dino Game Manager')
+        this.nowActiveScene.addGameObject(gameManager)
         this.loadResource()
-        this.setupGameObject()
-        this.setupGame()
-        requestAnimationFrame(this.gameLoop)
+        this.setupGameObject(gameManager)
         return init
     }
 
-    protected override update(): void {
-        super.update()
-    }
-
     public loadResource(): void {
-        Logger.info('Loading Resources')
         // Dino Resources
-        const dinoIdle = new Sprite(this.resourceManager, 'ass,ets/Dino/dinoIdle.png')
+        const dinoIdle = new Sprite(this.resourceManager, 'assets/Dino/dinoIdle.png')
         this.resourceManager.registerResource('dinoIdle', dinoIdle)
 
         const dinoJump = new Sprite(this.resourceManager, 'assets/Dino/dinoJump.png')
@@ -147,27 +138,26 @@ class DinoGame extends Game {
         const replay = new Sprite(this.resourceManager, 'assets/UI/replay.png')
         this.resourceManager.registerResource('replay', replay)
     }
-    public setupGame(): void {
-        this.gameManager.inputManager = this.inputManager
+
+    public setupGameObject(gameManager: GameManager): void {
+        this.setupGround(gameManager)
+        this.setupDino(gameManager)
     }
 
-    public setupGameObject(): void {
-        this.setupGround()
-        this.setupDino()
-    }
-
-    public setupGround(): void {
-        const ground1 = new Ground('ground1', new Vector2(-600, -75))
+    public setupGround(gameManager: GameManager): void {
         const groundSprite = this.resourceManager.loadResource('ground')
-        const ground2 = new Ground('ground2', new Vector2(-600 + 2400, -75))
+
+        const ground1 = new Ground('ground1', new Vector2(-600, -75))
+        const ground2 = new Ground('ground2', new Vector2(1800, -75))
+
         if (groundSprite !== undefined) {
             ground1.loadResource(groundSprite)
             ground2.loadResource(groundSprite)
         }
         this.nowActiveScene.addGameObject(ground1)
         this.nowActiveScene.addGameObject(ground2)
-        this.gameManager.ground1 = ground1
-        this.gameManager.ground2 = ground2
+        gameManager.ground1 = ground1
+        gameManager.ground2 = ground2
     }
 
     public setupBird(): void {
@@ -182,9 +172,11 @@ class DinoGame extends Game {
         //
     }
 
-    public setupDino(): void {
+    public setupDino(gameManager: GameManager): void {
         const dino = new Dino('Dino', new Vector2(-500, -40))
         const dinoAnimator = new SpriteAnimator(dino)
+        dino.dinoAnimator = dinoAnimator
+        dino.addComponent(dinoAnimator)
 
         const idleAnimation = new SpriteAnimation('Idle', 60)
         const deadAnimation = new SpriteAnimation('Dead', 60)
@@ -217,15 +209,10 @@ class DinoGame extends Game {
         dinoAnimator.registerAnimation('Crouch', crouchAnimation)
         dinoAnimator.play('Idle')
 
-        dino.dinoAnimator = dinoAnimator
-        dino.addComponent(dinoAnimator)
+        dino.init()
 
         this.nowActiveScene.addGameObject(dino)
-        this.gameManager.dino = dino
-    }
-
-    public setupGameManager(): void {
-        //
+        gameManager.dino = dino
     }
 }
 

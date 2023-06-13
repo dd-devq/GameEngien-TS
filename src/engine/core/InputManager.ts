@@ -2,11 +2,12 @@ import { Logger } from '../utils/Logger'
 class InputManager {
     private static instance: InputManager
     private keyState: { [key: string]: boolean } = {}
+    private keyHoldState: { [key: string]: boolean } = {}
 
     constructor() {
         document.addEventListener('keyup', this.handleKeyUp.bind(this))
         document.addEventListener('keydown', this.handleKeyDown.bind(this))
-
+        InputManager.instance = this
         Logger.info('Input Manager Initialized!')
     }
 
@@ -17,6 +18,10 @@ class InputManager {
     private handleKeyUp(event: KeyboardEvent): void {
         const key = event.key
         this.keyState[key] = false
+        this.keyHoldState[key] = false
+        if (this.keyHoldState[key] == false) {
+            this.keyHoldState[key] == true
+        }
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
@@ -26,6 +31,10 @@ class InputManager {
 
     public isKeyPressed(key: string): boolean {
         return this.keyState[key]
+    }
+
+    public isKeyHeld(key: string): boolean {
+        return this.keyHoldState[key]
     }
 
     public static getInstance(): InputManager {

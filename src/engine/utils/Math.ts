@@ -18,12 +18,17 @@ class Vector2 {
         return new Vector2(this.x - vector.x, this.y - vector.y)
     }
 
-    public mul(vector: Vector2): Vector2 {
-        return new Vector2(this.x * vector.x, this.y * vector.y)
+    public div(scalar: number): Vector2 {
+        return new Vector2(this.x / scalar, this.y / scalar)
     }
 
-    public div(vector: Vector2): Vector2 {
-        return new Vector2(this.x / vector.x, this.y / vector.y)
+    public normalize(): Vector2 {
+        const magnitude = this.magnitude()
+        return this.div(magnitude)
+    }
+
+    public magnitude(): number {
+        return Math.sqrt(this.x * this.x + this.y * this.y)
     }
 
     public reset(): void {

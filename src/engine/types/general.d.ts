@@ -9,8 +9,3 @@ interface RendererConfig {
     width: number
     height: number
 }
-
-interface GameConfig {
-    deltaTime: number
-    fps: number
-}

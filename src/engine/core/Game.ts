@@ -12,8 +12,7 @@ class Game {
     public resourceManager: ResourceManager
     public inputManager: InputManager
 
-    private deltaTime: number
-    private fps: number
+    private deltaTime = 0
 
     constructor() {
         this.sceneMap = new Map<string, Scene>()
@@ -21,14 +20,12 @@ class Game {
         this.addScene(defaultScene)
     }
 
-    public init(gameConfig: GameConfig, renderConfig: RendererConfig): boolean {
+    public init(renderConfig: RendererConfig): boolean {
         this.renderer = new Renderer(renderConfig)
         this.resourceManager = new ResourceManager()
         this.inputManager = new InputManager()
 
-        this.deltaTime = gameConfig.deltaTime
-        this.fps = gameConfig.fps
-
+        requestAnimationFrame(this.gameLoop)
         return true
     }
 
@@ -39,8 +36,10 @@ class Game {
         this.render()
 
         Timer.end()
+
         this.deltaTime = Timer.getDeltaTime()
         this.inputManager.reset()
+
         requestAnimationFrame(this.gameLoop)
     }
 
