@@ -35,6 +35,10 @@ class Vector2 {
         this.x = 0
         this.y = 0
     }
+    public equal(vec2: Vector2): void {
+        this.x = vec2.x
+        this.y = vec2.y
+    }
 }
 
 export { Vector2 }

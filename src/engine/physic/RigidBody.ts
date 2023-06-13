@@ -8,7 +8,8 @@ class RigidBody extends Component {
     public velocity: Vector2
 
     public mass: number
-    public G = 9.8
+    public G = -9.8
+    public isSimulated = false
 
     constructor(gameObject: IRenderable, mass: number) {
         super(gameObject)
@@ -25,16 +26,16 @@ class RigidBody extends Component {
 
     applyForce(force: Vector2): void {
         const scaledForce = force.div(this.mass)
-        this.acceleration = this.acceleration.add(scaledForce)
+        this.acceleration.equal(this.acceleration.add(scaledForce))
     }
 
     public override update(deltaTime: number): void {
-        this.velocity = this.velocity.add(this.acceleration.scale(deltaTime + 0.001))
-
-        const newPosition = this.parent.position.add(this.velocity)
-        this.parent.position.x = newPosition.x
-        this.parent.position.y = newPosition.y
-        this.resetAcceleration()
+        if (this.isSimulated) {
+            this.applyGravity()
+            this.velocity.equal(this.velocity.add(this.acceleration.scale(deltaTime + 0.05)))
+            this.parent.position.equal(this.parent.position.add(this.velocity))
+            this.resetAcceleration()
+        }
     }
 
     public override render(renderer: Renderer): void {

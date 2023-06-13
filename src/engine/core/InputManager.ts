@@ -19,14 +19,14 @@ class InputManager {
         const key = event.key
         this.keyState[key] = false
         this.keyHoldState[key] = false
-        if (this.keyHoldState[key] == false) {
-            this.keyHoldState[key] == true
-        }
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
         const key = event.key
         this.keyState[key] = true
+        if (this.keyHoldState[key] == false) {
+            this.keyHoldState[key] = true
+        }
     }
 
     public isKeyPressed(key: string): boolean {

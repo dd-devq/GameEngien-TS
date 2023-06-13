@@ -17,13 +17,13 @@ class Dino extends GameObject {
     public nowRenderingResource: IRenderResource | undefined
     public dinoAnimator: SpriteAnimator
     public dinoFSMSystem: DinoFSMSystem
-    public DEFAULT_POSITION: Vector2
+    public DEFAULT_POSITION: Vector2 = new Vector2()
     public maxHeight = 25
 
     constructor(name: string, position?: Vector2) {
         super(name, position)
         if (position !== undefined) {
-            this.DEFAULT_POSITION = position
+            this.DEFAULT_POSITION.equal(position)
             this.rigidBody = new RigidBody(this, 1)
         }
     }
@@ -87,36 +87,41 @@ class DinoFSMSystem extends FSMSystem {
 class JumpingState extends FSMState {
     public jumpInProgress: boolean
     public falling: boolean
-    public jumpForce = 100
+    public jumpForce = 225
 
     public override onEnter(): void {
         this.falling = false
         this.jumpInProgress = true
         ;(<Dino> this.parent.Parent).dinoAnimator.play('Jump')
         ;(<Dino> this.parent.Parent).rigidBody.resetVelocity()
+        ;(<Dino> this.parent.Parent).rigidBody.isSimulated = true
+        this.jump()
     }
 
     public override onExit(): void {
         this.jumpInProgress = false
         this.falling = false
         ;(<Dino> this.parent.Parent).rigidBody.resetVelocity()
+        ;(<Dino> this.parent.Parent).rigidBody.isSimulated = false
+        ;(<Dino> this.parent.Parent).rigidBody.G = -9.8
     }
-    public override onUpdate(deltaTime: number): void {
-        (<Dino> this.parent.Parent).rigidBody.applyGravity()
 
-        if (this.jumpInProgress && !this.falling) {
-            if (this.parent.Parent.position.y <= (this.parent.Parent as Dino).maxHeight) {
-                this.jump()
-            } else {
-                this.falling = true
+    public override onUpdate(deltaTime: number): void {
+        if (this.jumpInProgress) {
+            if (InputManager.getInstance().isKeyPressed('ArrowDown')) {
+                (<Dino> this.parent.Parent).rigidBody.G *= 5
             }
         }
 
-        if (
-            this.parent.Parent.position.y <= (this.parent.Parent as Dino).DEFAULT_POSITION.y &&
-            !this.jumpInProgress
-        ) {
-            this.parent.gotoState((this.parent as DinoFSMSystem).runningState)
+        if (this.jumpInProgress && !this.falling) {
+            if (this.parent.Parent.position.y >= (this.parent.Parent as Dino).maxHeight) {
+                this.falling = true
+            }
+        } else {
+            if (this.parent.Parent.position.y <= (<Dino> this.parent.Parent).DEFAULT_POSITION.y) {
+                this.parent.Parent.position.equal((<Dino> this.parent.Parent).DEFAULT_POSITION)
+                this.parent.gotoState((this.parent as DinoFSMSystem).runningState)
+            }
         }
     }
 
@@ -135,10 +140,12 @@ class RunningState extends FSMState {
 
     public override onUpdate(deltaTime: number): void {
         if (this.parent.Parent.position.y <= (<Dino> this.parent.Parent).DEFAULT_POSITION.y) {
-            this.parent.Parent.position.y = (<Dino> this.parent.Parent).DEFAULT_POSITION.y
+            this.parent.Parent.position.equal((<Dino> this.parent.Parent).DEFAULT_POSITION)
         }
 
         if (InputManager.getInstance().isKeyPressed('ArrowDown')) {
+            this.parent.gotoState((this.parent as DinoFSMSystem).crouchingState)
+        } else if (InputManager.getInstance().isKeyHeld('ArrowDown')) {
             this.parent.gotoState((this.parent as DinoFSMSystem).crouchingState)
         } else if (InputManager.getInstance().isKeyPressed(' ')) {
             this.parent.gotoState((this.parent as DinoFSMSystem).jumpingState)
@@ -151,7 +158,7 @@ class CrouchingState extends FSMState {
     public override onEnter(): void {
         (<Dino> this.parent.Parent).dinoAnimator.play('Crouch')
         ;(<Dino> this.parent.Parent).DEFAULT_POSITION.y -= this.crouchOffset
-        this.parent.Parent.position.y = (<Dino> this.parent.Parent).DEFAULT_POSITION.y
+        this.parent.Parent.position.equal((<Dino> this.parent.Parent).DEFAULT_POSITION)
     }
 
     public override onExit(): void {
@@ -161,9 +168,15 @@ class CrouchingState extends FSMState {
 
     public override onUpdate(deltaTime: number): void {
         if (this.parent.Parent.position.y <= (<Dino> this.parent.Parent).DEFAULT_POSITION.y) {
-            this.parent.Parent.position.y = (<Dino> this.parent.Parent).DEFAULT_POSITION.y
+            this.parent.Parent.position.equal((<Dino> this.parent.Parent).DEFAULT_POSITION)
         }
-        if (!InputManager.getInstance().isKeyPressed('ArrowDown')) {
+        console.log(!InputManager.getInstance().isKeyHeld('ArrowDown'))
+        if (
+            InputManager.getInstance().isKeyPressed('ArrowDown') ||
+            InputManager.getInstance().isKeyHeld('ArrowDown')
+        ) {
+            this.parent.gotoState((this.parent as DinoFSMSystem).crouchingState)
+        } else {
             this.parent.gotoState((this.parent as DinoFSMSystem).runningState)
         }
     }

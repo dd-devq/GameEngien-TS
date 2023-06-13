@@ -5,6 +5,6 @@ const rendererConfig = {
     height: 250,
 }
 
-const dinoGame = new DinoGame()
-
-dinoGame.init(rendererConfig)
+window.onload = () => {
+    new DinoGame(rendererConfig)
+}

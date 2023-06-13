@@ -6,7 +6,7 @@ import { Timer } from '../Engine'
 import { ResourceManager } from '../Engine'
 
 class Game {
-    public sceneMap: Map<string, Scene>
+    public sceneMap: Map<string, Scene> = new Map<string, Scene>()
     public nowActiveScene: Scene
     public renderer: Renderer
     public resourceManager: ResourceManager
@@ -14,22 +14,13 @@ class Game {
 
     private deltaTime = 0
 
-    constructor() {
-        this.sceneMap = new Map<string, Scene>()
-        const defaultScene = new Scene('Default')
-        this.addScene(defaultScene)
-    }
-
-    public init(renderConfig: RendererConfig): boolean {
+    public initGame(renderConfig: RendererConfig): void {
         this.renderer = new Renderer(renderConfig)
         this.resourceManager = new ResourceManager()
         this.inputManager = new InputManager()
-
-        requestAnimationFrame(this.gameLoop)
-        return true
     }
 
-    public gameLoop = (): void => {
+    public gameLoop(): void {
         Timer.start()
 
         this.update()
@@ -40,7 +31,7 @@ class Game {
         this.deltaTime = Timer.getDeltaTime()
         this.inputManager.reset()
 
-        requestAnimationFrame(this.gameLoop)
+        requestAnimationFrame(this.gameLoop.bind(this))
     }
 
     public addScene(scene: Scene): void {
