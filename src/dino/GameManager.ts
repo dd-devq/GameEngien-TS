@@ -39,7 +39,16 @@ class GameManager extends GameObject {
     public override update(deltaTime: number): void {
         switch (this.gameState) {
             case gameState.READY: {
-                this.updateReady(deltaTime)
+                if (InputManager.getInstance().isKeyPressed(' ')) {
+                    this.gameState = gameState.GAMEPLAY
+                    this.ground1.isUpdated = true
+                    this.ground2.isUpdated = true
+                    for (const cloud of this.clouds) {
+                        cloud.isUpdated = true
+                    }
+                    this.dino.isUpdated = true
+                }
+
                 break
             }
             case gameState.GAMEPLAY: {
@@ -47,7 +56,13 @@ class GameManager extends GameObject {
                 break
             }
             case gameState.GAMEOVER: {
-                this.updateGameover(deltaTime)
+                this.ground1.reset()
+                this.ground2.reset()
+                for (const cloud of this.clouds) {
+                    cloud.reset()
+                }
+
+                this.gameState = gameState.READY
                 break
             }
             default: {
@@ -59,9 +74,14 @@ class GameManager extends GameObject {
 
     public updateGameplay(deltaTime: number): void {
         if (InputManager.getInstance().isKeyPressed('d')) {
-            this.gameState = gameState.GAMEOVER
             this.ground1.isUpdated = false
             this.ground2.isUpdated = false
+            for (const cloud of this.clouds) {
+                cloud.isUpdated = false
+            }
+        }
+        if (InputManager.getInstance().isKeyPressed('a')) {
+            this.gameState = gameState.GAMEOVER
         }
 
         if (!this.ground1.isIncanvas) {
@@ -82,23 +102,11 @@ class GameManager extends GameObject {
         }
     }
 
-    public updateReady(deltaTime: number): void {
-        if (InputManager.getInstance().isKeyPressed(' ')) {
-            this.gameState = gameState.GAMEPLAY
-            Logger.info('Start Gameplay')
-            this.ground1.isUpdated = true
-            this.ground2.isUpdated = true
-            for (const cloud of this.clouds) {
-                cloud.isUpdated = true
-            }
-            this.dino.isUpdated = true
-        }
-    }
-
     public updateGameover(deltaTime: number): void {
         if (InputManager.getInstance().isKeyPressed(' ')) {
             this.ground1.reset()
             this.ground2.reset()
+
             this.gameState = gameState.READY
         }
     }
