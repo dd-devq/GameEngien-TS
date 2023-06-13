@@ -4,6 +4,9 @@ import { GameManager } from './GameManager'
 import { Ground } from './Ground'
 import { Dino } from './Dino'
 import { Cloud } from './Cloud'
+import { ObjectPool } from './ObjectPool'
+import { Cactus } from './Cactus'
+import { Bird } from './Bird'
 
 class DinoGame extends Game {
     constructor(renderConfig: RendererConfig) {
@@ -20,6 +23,7 @@ class DinoGame extends Game {
         const gameManager: GameManager = new GameManager('Dino Game Manager')
         this.nowActiveScene.addGameObject(gameManager)
         this.loadResource()
+        gameManager.resourceManager = this.resourceManager
         this.setupGameObject(gameManager)
     }
 
@@ -190,8 +194,14 @@ class DinoGame extends Game {
         gameManager.clouds.push(cloud4)
     }
 
-    private setupBird(): void {
-        //
+    private setupBird(gameManager: GameManager): void {
+        const birdPool = new ObjectPool<Bird>()
+        gameManager.birdPool = birdPool
+    }
+
+    private setupCactus(gameManager: GameManager): void {
+        const cactusPool = new ObjectPool<Cactus>()
+        gameManager.cactusPool = cactusPool
     }
 
     private setupScore(): void {

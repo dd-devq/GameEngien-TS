@@ -1,4 +1,11 @@
-import { Renderer, InputManager, Vector2, GameObject, Logger } from '../engine/Engine'
+import {
+    Renderer,
+    InputManager,
+    Vector2,
+    GameObject,
+    Logger,
+    ResourceManager,
+} from '../engine/Engine'
 import { Bird } from './Bird'
 import { Cactus } from './Cactus'
 import { Cloud } from './Cloud'
@@ -22,6 +29,7 @@ class GameManager extends GameObject {
     public ground1: Ground
     public ground2: Ground
     public inputManager: InputManager
+    public resourceManager: ResourceManager
 
     constructor(name: string) {
         super(name)
