@@ -1,10 +1,11 @@
 import { Vector2, Sprite, Game, SpriteAnimation, SpriteAnimator, Scene } from '../engine/Engine'
-
+import { Bird } from './Bird'
 import { GameManager } from './GameManager'
 import { Ground } from './Ground'
 import { Dino } from './Dino'
 import { Cloud } from './Cloud'
 import { Cactus } from './Cactus'
+
 class DinoGame extends Game {
     constructor(renderConfig: RendererConfig) {
         super()
@@ -152,6 +153,7 @@ class DinoGame extends Game {
         this.setupEnvironment(gameManager)
         this.setupDino(gameManager)
         this.setupCactus(gameManager)
+        this.setupBird(gameManager)
     }
 
     public setupEnvironment(gameManager: GameManager): void {
@@ -194,6 +196,25 @@ class DinoGame extends Game {
 
     private setupBird(gameManager: GameManager): void {
         // const birdPool = new ObjectPool<Bird>(createBird)
+
+        const bird = new Bird('Bird', new Vector2(1600, -10))
+        const birdAnimator = new SpriteAnimator(bird)
+        bird.birdAnimator = birdAnimator
+        bird.addComponent(birdAnimator)
+
+        const flyAnimation = new SpriteAnimation('Fly', 250)
+        const flyClip = [
+            this.resourceManager.loadResource('bird1'),
+            this.resourceManager.loadResource('bird2'),
+        ]
+
+        flyAnimation.setClip(flyClip as Sprite[])
+
+        birdAnimator.registerAnimation('Fly', flyAnimation)
+        birdAnimator.play('Fly')
+
+        this.nowActiveScene.addGameObject(bird)
+        gameManager.enemy = bird
     }
 
     private setupCactus(gameManager: GameManager): void {

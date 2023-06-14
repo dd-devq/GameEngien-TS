@@ -42,12 +42,11 @@ class Dino extends GameObject {
     public override update(deltaTime: number): void {
         if (this.isUpdated) {
             super.update(deltaTime)
-            this.nowRenderingResource = this.dinoAnimator.getCurrentFrame()
         }
         if (this.isDead) {
-            this.nowRenderingResource = this.dinoAnimator.getCurrentFrame()
             this.dinoFSMSystem.update(deltaTime)
         }
+        this.nowRenderingResource = this.dinoAnimator.getCurrentFrame()
     }
 
     public override render(renderer: Renderer): void {

@@ -10,7 +10,7 @@ import {
 import { getRandomInRange } from '../engine/utils/UUID'
 import { Cactus } from './Cactus'
 import { Cloud } from './Cloud'
-
+import { Bird } from './Bird'
 import { Dino } from './Dino'
 import { Ground } from './Ground'
 
@@ -29,6 +29,7 @@ class GameManager extends GameObject {
     public inputManager: InputManager
     public resourceManager: ResourceManager
     public currentObstacle: IRenderable[] = []
+    public enemy: Bird
 
     constructor(name: string) {
         super(name)
@@ -50,6 +51,7 @@ class GameManager extends GameObject {
                     }
 
                     this.dino.isUpdated = true
+                    this.enemy.isUpdated = true
                 }
 
                 break
@@ -71,6 +73,7 @@ class GameManager extends GameObject {
                     }
 
                     this.gameState = gameState.READY
+                    this.enemy.reset()
                 }
                 break
             }
@@ -122,6 +125,13 @@ class GameManager extends GameObject {
                 }
             }
         }
+        if (this.enemy.boxCollider.checkCollision(this.dino.boxCollider)) {
+            this.stopUpdate()
+            this.gameState = gameState.GAMEOVER
+        }
+        if (!this.enemy.isIncanvas) {
+            this.enemy.respawn()
+        }
     }
 
     public stopUpdate(): void {
@@ -134,7 +144,7 @@ class GameManager extends GameObject {
         for (const obstacle of this.currentObstacle) {
             (<GameObject>obstacle).isUpdated = false
         }
-
+        this.enemy.isUpdated = false
         this.dino.isDead = true
     }
 
