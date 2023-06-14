@@ -20,7 +20,7 @@ class RigidBody extends Component {
     }
 
     public applyGravity(): void {
-        const gravityForce = new Vector2(0, this.G * this.mass)
+        const gravityForce = new Vector2(0, this.G * this.mass * 0.5)
         this.applyForce(gravityForce)
     }
 

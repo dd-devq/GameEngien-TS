@@ -8,7 +8,8 @@ class Cloud extends GameObject {
     public imageOffset: Vector2
     public isIncanvas: boolean
     readonly MAX_SPEED: number = 15
-    readonly DEFAULT_SPEED: number = 2.5
+    readonly DEFAULT_SPEED: number = 2
+
     readonly DEFAULT_POSTION: Vector2 = new Vector2(0, 0)
 
     readonly MAX_HEIGHT = 100

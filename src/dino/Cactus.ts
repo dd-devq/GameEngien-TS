@@ -7,7 +7,7 @@ class Cactus extends GameObject {
     public imageOffset: Vector2
     public isIncanvas: boolean
     readonly MAX_SPEED: number = 15
-    readonly DEFAULT_SPEED: number = 3.5
+    readonly DEFAULT_SPEED: number = 2.5
     readonly DEFAULT_POSTION: Vector2 = new Vector2(0, 0)
     public boxCollider: BoxCollider
 

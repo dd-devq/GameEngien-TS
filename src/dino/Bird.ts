@@ -15,7 +15,7 @@ class Bird extends GameObject {
     public imageOffset: Vector2
     public isIncanvas: boolean
     readonly MAX_SPEED: number = 15
-    readonly DEFAULT_SPEED: number = 4
+    readonly DEFAULT_SPEED: number = 2.75
     readonly DEFAULT_POSTION: Vector2 = new Vector2(0, 0)
     public boxCollider: BoxCollider
     public birdAnimator: SpriteAnimator
