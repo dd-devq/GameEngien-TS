@@ -5,14 +5,14 @@ import {
     GameObject,
     Logger,
     ResourceManager,
+    Sprite,
 } from '../engine/Engine'
-import { Bird } from './Bird'
+import { getRandomInRange } from '../engine/utils/UUID'
 import { Cactus } from './Cactus'
 import { Cloud } from './Cloud'
 
 import { Dino } from './Dino'
 import { Ground } from './Ground'
-import { ObjectPool } from './ObjectPool'
 
 enum gameState {
     READY = 0,
@@ -22,14 +22,13 @@ enum gameState {
 
 class GameManager extends GameObject {
     public gameState: gameState
-    public cactusPool: ObjectPool<Cactus>
-    public birdPool: ObjectPool<Bird>
     public clouds: Cloud[] = []
     public dino: Dino
     public ground1: Ground
     public ground2: Ground
     public inputManager: InputManager
     public resourceManager: ResourceManager
+    public currentObstacle: IRenderable[] = []
 
     constructor(name: string) {
         super(name)
@@ -46,6 +45,10 @@ class GameManager extends GameObject {
                     for (const cloud of this.clouds) {
                         cloud.isUpdated = true
                     }
+                    for (const obstacle of this.currentObstacle) {
+                        (<GameObject>obstacle).isUpdated = true
+                    }
+
                     this.dino.isUpdated = true
                 }
 
@@ -56,13 +59,19 @@ class GameManager extends GameObject {
                 break
             }
             case gameState.GAMEOVER: {
-                this.ground1.reset()
-                this.ground2.reset()
-                for (const cloud of this.clouds) {
-                    cloud.reset()
-                }
+                if (InputManager.getInstance().isKeyPressed(' ')) {
+                    this.ground1.reset()
+                    this.ground2.reset()
+                    for (const cloud of this.clouds) {
+                        cloud.reset()
+                    }
 
-                this.gameState = gameState.READY
+                    for (const obstacle of this.currentObstacle) {
+                        (<GameObject>obstacle).reset()
+                    }
+
+                    this.gameState = gameState.READY
+                }
                 break
             }
             default: {
@@ -73,17 +82,6 @@ class GameManager extends GameObject {
     }
 
     public updateGameplay(deltaTime: number): void {
-        if (InputManager.getInstance().isKeyPressed('d')) {
-            this.ground1.isUpdated = false
-            this.ground2.isUpdated = false
-            for (const cloud of this.clouds) {
-                cloud.isUpdated = false
-            }
-        }
-        if (InputManager.getInstance().isKeyPressed('a')) {
-            this.gameState = gameState.GAMEOVER
-        }
-
         if (!this.ground1.isIncanvas) {
             this.ground1.setPosition(
                 new Vector2(
@@ -92,6 +90,7 @@ class GameManager extends GameObject {
                 )
             )
         }
+
         if (!this.ground2.isIncanvas) {
             this.ground2.setPosition(
                 new Vector2(
@@ -100,18 +99,47 @@ class GameManager extends GameObject {
                 )
             )
         }
-    }
 
-    public updateGameover(deltaTime: number): void {
-        if (InputManager.getInstance().isKeyPressed(' ')) {
-            this.ground1.reset()
-            this.ground2.reset()
-
-            this.gameState = gameState.READY
+        for (const obstacle of this.currentObstacle) {
+            if (!(<Cactus>obstacle).isIncanvas) {
+                (<Cactus>obstacle).respawn()
+                const isSmall = getRandomInRange(0, 1)
+                const index = getRandomInRange(1, 6)
+                let newSprite = undefined
+                let asset = ''
+                if (isSmall) {
+                    asset = 'smallCactus' + index.toString()
+                    ;(<Cactus>obstacle).position.y -= 10
+                } else {
+                    asset = 'cactus' + index.toString()
+                }
+                newSprite = this.resourceManager.loadResource(asset)
+                ;(<Cactus>obstacle).loadResource(newSprite as Sprite)
+            } else {
+                if (this.dino.boxCollider.checkCollision((<Cactus>obstacle).boxCollider)) {
+                    this.stopUpdate()
+                    this.gameState = gameState.GAMEOVER
+                }
+            }
         }
     }
+
+    public stopUpdate(): void {
+        this.ground1.isUpdated = false
+        this.ground2.isUpdated = false
+        for (const cloud of this.clouds) {
+            cloud.isUpdated = false
+        }
+
+        for (const obstacle of this.currentObstacle) {
+            (<GameObject>obstacle).isUpdated = false
+        }
+
+        this.dino.isDead = true
+    }
+
     public override render(renderer: Renderer): void {
-        //
+        super.render(renderer)
     }
 }
 

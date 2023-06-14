@@ -1,5 +1,8 @@
-import { GameObject } from '../engine/Engine'
+import { GameObject, Vector2 } from '../engine/Engine'
 
 class Bird extends GameObject {}
 
-export { Bird }
+function createBird(name: string, position?: Vector2): Bird {
+    return new Bird(name, position)
+}
+export { Bird, createBird }

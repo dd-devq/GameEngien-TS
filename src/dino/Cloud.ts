@@ -37,7 +37,6 @@ class Cloud extends GameObject {
 
     public override render(renderer: Renderer): void {
         this.isIncanvas = renderer.renderContext.isInCanvas(this.position, this.imageOffset)
-        console.log(this.position)
 
         if (this.isActive && this.isIncanvas) {
             renderer.drawSprite(this.nowRenderingResource as Sprite, this.position)

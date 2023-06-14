@@ -14,7 +14,6 @@ class BoxCollider extends Component {
     }
 
     public override render(renderer: Renderer): void {
-        console.log(this.showCollider && this.isDrawable)
         if (this.showCollider && this.isDrawable) {
             renderer.drawRect(this.parent.position, this.width, this.height)
         }
@@ -35,6 +34,11 @@ class BoxCollider extends Component {
             return true
         }
         return false
+    }
+
+    public resize(width: number, height: number) {
+        this.width = width
+        this.height = height
     }
 }
 export { BoxCollider }

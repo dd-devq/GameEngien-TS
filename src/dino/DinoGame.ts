@@ -4,10 +4,7 @@ import { GameManager } from './GameManager'
 import { Ground } from './Ground'
 import { Dino } from './Dino'
 import { Cloud } from './Cloud'
-import { ObjectPool } from './ObjectPool'
 import { Cactus } from './Cactus'
-import { Bird } from './Bird'
-
 class DinoGame extends Game {
     constructor(renderConfig: RendererConfig) {
         super()
@@ -154,6 +151,7 @@ class DinoGame extends Game {
     private setupGameObject(gameManager: GameManager): void {
         this.setupEnvironment(gameManager)
         this.setupDino(gameManager)
+        this.setupCactus(gameManager)
     }
 
     public setupEnvironment(gameManager: GameManager): void {
@@ -195,13 +193,26 @@ class DinoGame extends Game {
     }
 
     private setupBird(gameManager: GameManager): void {
-        const birdPool = new ObjectPool<Bird>()
-        gameManager.birdPool = birdPool
+        // const birdPool = new ObjectPool<Bird>(createBird)
     }
 
     private setupCactus(gameManager: GameManager): void {
-        const cactusPool = new ObjectPool<Cactus>()
-        gameManager.cactusPool = cactusPool
+        // const cactusPool = new ObjectPool<Cactus>(createCactus)
+
+        const cactusSprite = this.resourceManager.loadResource('cactus1')
+
+        const cactus1 = new Cactus('Cactus1', new Vector2(700, -42.5))
+        const cactus2 = new Cactus('Cactus2', new Vector2(1200, -42.5))
+
+        if (cactusSprite !== undefined) {
+            cactus1.loadResource(cactusSprite)
+            cactus2.loadResource(cactusSprite)
+        }
+
+        this.nowActiveScene.addGameObject(cactus1)
+        this.nowActiveScene.addGameObject(cactus2)
+        gameManager.currentObstacle.push(cactus1)
+        gameManager.currentObstacle.push(cactus2)
     }
 
     private setupScore(): void {
