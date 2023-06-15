@@ -214,7 +214,10 @@ class DeadState extends FSMState {
     }
 
     public override onUpdate(deltaTime: number): void {
-        if (InputManager.getInstance().isKeyPressed(' ')) {
+        if (
+            InputManager.getInstance().isKeyPressed(' ') ||
+            InputManager.getInstance().isMouseClicked()
+        ) {
             this.parent.gotoState((this.parent as DinoFSMSystem).readyState)
         }
     }

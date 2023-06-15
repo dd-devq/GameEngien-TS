@@ -6,6 +6,7 @@ import { Dino } from './Dino'
 import { Cloud } from './Cloud'
 import { Cactus } from './Cactus'
 import { Score } from './Score'
+import { ReplayButton } from './ReplayButton'
 
 class DinoGame extends Game {
     constructor(renderConfig: RendererConfig) {
@@ -160,6 +161,7 @@ class DinoGame extends Game {
         this.setupCactus(gameManager)
         this.setupBird(gameManager)
         this.setupScore(gameManager)
+        this.setupUI(gameManager)
     }
 
     public setupEnvironment(gameManager: GameManager): void {
@@ -263,8 +265,16 @@ class DinoGame extends Game {
         this.nowActiveScene.addGameObject(gameScore)
     }
 
-    private setupUI(): void {
-        //
+    private setupUI(gameManager: GameManager): void {
+        const replayButton = new ReplayButton('Replay', new Vector2())
+
+        const buttonSprite = this.resourceManager.loadResource('replay')
+        if (buttonSprite !== undefined) {
+            replayButton.loadResource(buttonSprite)
+        }
+        gameManager.replayButton = replayButton
+
+        this.nowActiveScene.addGameObject(replayButton)
     }
 
     private setupDino(gameManager: GameManager): void {

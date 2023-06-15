@@ -14,6 +14,7 @@ import { Bird } from './Bird'
 import { Dino } from './Dino'
 import { Ground } from './Ground'
 import { Score } from './Score'
+import { ReplayButton } from './ReplayButton'
 
 enum gameState {
     READY = 0,
@@ -33,6 +34,7 @@ class GameManager extends GameObject {
     public enemy: Bird
     public score: Score
     public highScore: Score
+    public replayButton: ReplayButton
 
     constructor(name: string) {
         super(name)
@@ -66,7 +68,10 @@ class GameManager extends GameObject {
                 break
             }
             case gameState.GAMEOVER: {
-                if (InputManager.getInstance().isKeyPressed(' ')) {
+                if (
+                    InputManager.getInstance().isKeyPressed(' ') ||
+                    InputManager.getInstance().isMouseClicked()
+                ) {
                     this.ground1.reset()
                     this.ground2.reset()
                     for (const cloud of this.clouds) {
@@ -80,6 +85,7 @@ class GameManager extends GameObject {
                     this.gameState = gameState.READY
                     this.enemy.reset()
                     this.score.reset()
+                    this.replayButton.setActive(false)
                 }
                 break
             }
@@ -157,6 +163,7 @@ class GameManager extends GameObject {
         if (this.highScore.score < this.score.score) {
             this.highScore.score = this.score.score
         }
+        this.replayButton.setActive(true)
     }
 
     public override render(renderer: Renderer): void {
