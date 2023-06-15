@@ -13,6 +13,7 @@ import { Cloud } from './Cloud'
 import { Bird } from './Bird'
 import { Dino } from './Dino'
 import { Ground } from './Ground'
+import { Score } from './Score'
 
 enum gameState {
     READY = 0,
@@ -30,6 +31,8 @@ class GameManager extends GameObject {
     public resourceManager: ResourceManager
     public currentObstacle: IRenderable[] = []
     public enemy: Bird
+    public score: Score
+    public highScore: Score
 
     constructor(name: string) {
         super(name)
@@ -52,6 +55,8 @@ class GameManager extends GameObject {
 
                     this.dino.isUpdated = true
                     this.enemy.isUpdated = true
+                    this.score.isUpdated = true
+                    this.highScore.setActive(false)
                 }
 
                 break
@@ -74,6 +79,7 @@ class GameManager extends GameObject {
 
                     this.gameState = gameState.READY
                     this.enemy.reset()
+                    this.score.reset()
                 }
                 break
             }
@@ -146,6 +152,11 @@ class GameManager extends GameObject {
         }
         this.enemy.isUpdated = false
         this.dino.isDead = true
+        this.score.isUpdated = false
+        this.highScore.setActive(true)
+        if (this.highScore.score < this.score.score) {
+            this.highScore.score = this.score.score
+        }
     }
 
     public override render(renderer: Renderer): void {

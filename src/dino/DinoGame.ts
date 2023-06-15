@@ -5,6 +5,7 @@ import { Ground } from './Ground'
 import { Dino } from './Dino'
 import { Cloud } from './Cloud'
 import { Cactus } from './Cactus'
+import { Score } from './Score'
 
 class DinoGame extends Game {
     constructor(renderConfig: RendererConfig) {
@@ -109,6 +110,10 @@ class DinoGame extends Game {
         this.resourceManager.registerResource('smallCactus6', smallCactus6)
 
         // UI Resources
+
+        const digit0 = new Sprite(this.resourceManager, 'assets/UI/0.png')
+        this.resourceManager.registerResource('digit0', digit0)
+
         const digit1 = new Sprite(this.resourceManager, 'assets/UI/1.png')
         this.resourceManager.registerResource('digit1', digit1)
 
@@ -154,6 +159,7 @@ class DinoGame extends Game {
         this.setupDino(gameManager)
         this.setupCactus(gameManager)
         this.setupBird(gameManager)
+        this.setupScore(gameManager)
     }
 
     public setupEnvironment(gameManager: GameManager): void {
@@ -202,7 +208,7 @@ class DinoGame extends Game {
         bird.birdAnimator = birdAnimator
         bird.addComponent(birdAnimator)
 
-        const flyAnimation = new SpriteAnimation('Fly', 250)
+        const flyAnimation = new SpriteAnimation('Fly', 60)
         const flyClip = [
             this.resourceManager.loadResource('bird1'),
             this.resourceManager.loadResource('bird2'),
@@ -236,8 +242,25 @@ class DinoGame extends Game {
         gameManager.currentObstacle.push(cactus2)
     }
 
-    private setupScore(): void {
-        //
+    private setupScore(gameManager: GameManager): void {
+        const gameScore = new Score('Game Score', new Vector2(525, 100))
+        const highScore = new Score('High Score', new Vector2(450, 100))
+        // const digits = [
+        //     this.resourceManager.loadResource('digit0'),
+        //     this.resourceManager.loadResource('digit1'),
+        //     this.resourceManager.loadResource('digit2'),
+        //     this.resourceManager.loadResource('digit3'),
+        //     this.resourceManager.loadResource('digit4'),
+        //     this.resourceManager.loadResource('digit5'),
+        //     this.resourceManager.loadResource('digit6'),
+        //     this.resourceManager.loadResource('digit7'),
+        //     this.resourceManager.loadResource('digit8'),
+        //     this.resourceManager.loadResource('digit9'),
+        // ]
+        gameManager.score = gameScore
+        gameManager.highScore = highScore
+        this.nowActiveScene.addGameObject(highScore)
+        this.nowActiveScene.addGameObject(gameScore)
     }
 
     private setupUI(): void {
@@ -250,11 +273,11 @@ class DinoGame extends Game {
         dino.dinoAnimator = dinoAnimator
         dino.addComponent(dinoAnimator)
 
-        const idleAnimation = new SpriteAnimation('Idle', 175)
-        const deadAnimation = new SpriteAnimation('Dead', 175)
-        const jumpAnimation = new SpriteAnimation('Jump', 175)
-        const runAnimation = new SpriteAnimation('Run', 175)
-        const crouchAnimation = new SpriteAnimation('Crouch', 175)
+        const idleAnimation = new SpriteAnimation('Idle', 60)
+        const deadAnimation = new SpriteAnimation('Dead', 60)
+        const jumpAnimation = new SpriteAnimation('Jump', 60)
+        const runAnimation = new SpriteAnimation('Run', 60)
+        const crouchAnimation = new SpriteAnimation('Crouch', 60)
 
         const idleClip = [this.resourceManager.loadResource('dinoIdle')]
         const deadClip = [this.resourceManager.loadResource('dinoDead')]

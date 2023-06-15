@@ -96,7 +96,7 @@ class DinoFSMSystem extends FSMSystem {
 class JumpingState extends FSMState {
     public jumpInProgress: boolean
     public falling: boolean
-    public jumpForce = 160
+    public jumpForce = 105
 
     public override onEnter(): void {
         this.falling = false

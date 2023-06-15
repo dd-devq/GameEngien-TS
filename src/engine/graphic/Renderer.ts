@@ -23,6 +23,7 @@ class Renderer {
         const worldPosition = this.renderContext.toWorldPosition(position)
         RenderContext.canvasContext.drawImage(sprite.image, worldPosition.x, worldPosition.y)
     }
+
     public drawRect(position: Vector2, width: number, height: number) {
         const worldPosition = this.renderContext.toWorldPosition(position)
         RenderContext.canvasContext.beginPath()
@@ -30,6 +31,13 @@ class Renderer {
         RenderContext.canvasContext.strokeStyle = 'green'
         RenderContext.canvasContext.rect(worldPosition.x, worldPosition.y, width, height)
         RenderContext.canvasContext.stroke()
+    }
+
+    public drawText(text: string, position: Vector2) {
+        const worldPosition = this.renderContext.toWorldPosition(position)
+        RenderContext.canvasContext.font = '24px Roboto'
+        RenderContext.canvasContext.strokeStyle = 'black'
+        RenderContext.canvasContext.strokeText(text, worldPosition.x, worldPosition.y)
     }
 }
 
