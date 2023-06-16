@@ -35,6 +35,7 @@ class SpriteAnimator extends Component {
         this.animationClips.set(animation, animationClip)
     }
 
+    // Set to parent
     public getCurrentFrame(): Sprite | undefined {
         return this.animationClips.get(this.currentAnimation)?.getCurrentFrame()
     }

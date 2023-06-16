@@ -1,7 +1,5 @@
-import { FSMSystem } from './FSMSystem'
-
-abstract class FSMState {
-    public parent: FSMSystem
+abstract class FSMState<T> {
+    public parent: T
 
     public abstract onEnter(): void
 

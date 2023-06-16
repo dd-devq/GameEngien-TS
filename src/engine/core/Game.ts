@@ -4,8 +4,9 @@ import { InputManager } from './InputManager'
 import { Logger } from '../utils/Logger'
 import { Timer } from '../Engine'
 import { ResourceManager } from '../Engine'
-
+// Game Scene, Gameplay/Game UI, Game
 class Game {
+    // prefer array
     public sceneMap: Map<string, Scene> = new Map<string, Scene>()
     public nowActiveScene: Scene
     public renderer: Renderer
@@ -22,6 +23,8 @@ class Game {
 
     public gameLoop(): void {
         Timer.start()
+        // Save input in Imput Manager
+        // Add Physic Manager
 
         this.update()
         this.render()

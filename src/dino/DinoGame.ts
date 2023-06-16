@@ -8,7 +8,15 @@ import { Cactus } from './Cactus'
 import { Score } from './Score'
 import { ReplayButton } from './ReplayButton'
 
+//Event Listeners for all object
+//Input Click and Touch  and Mouse
 class DinoGame extends Game {
+    // Game Manager Here
+    // Update game here
+    // Extends Scene for 3 stage of gameplay
+    // Add back to DinoGame
+    // Load resources and make gameobejct in Scene
+    // Renderable object -> array, render 1 place
     constructor(renderConfig: RendererConfig) {
         super()
 

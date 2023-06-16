@@ -3,7 +3,7 @@ import { GameObject, Renderer, Vector2 } from '../engine/Engine'
 export class Score extends GameObject {
     public score = 0
     public stringScore = ''
-    public factor = 500
+    public factor = 200
     readonly FACTOR = 2000
     public accumulate = 0
 

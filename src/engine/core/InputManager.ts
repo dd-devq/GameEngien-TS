@@ -6,6 +6,8 @@ class InputManager {
     private keyHoldState: { [key: string]: boolean } = {}
     private isClicked = false
     private isHover = false
+
+    // Add Event Class, add event listener to object
     constructor() {
         document.addEventListener('keyup', this.handleKeyUp.bind(this))
         document.addEventListener('keydown', this.handleKeyDown.bind(this))

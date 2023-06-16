@@ -9,6 +9,8 @@ class RigidBody extends Component {
 
     public mass: number
     public G = -9.8
+
+    // change name
     public isSimulated = false
 
     constructor(gameObject: IRenderable, mass: number) {
